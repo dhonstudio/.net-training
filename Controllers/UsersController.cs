@@ -48,6 +48,11 @@ namespace traningday2.Controllers
             {
                 Message = "user tidak ditemukan"
             });
+            var userRoleExist = _schoolContext.UserRoles.FirstOrDefault(x => x.IDUser == userExist.ID && x.IDRole == userRoleParam.IDRole);
+            if (userRoleExist != null) return BadRequest(new
+            {
+                Message = "role sudah pernah ditambahkan"
+            });
             var userRole = _mapper.Map<UserRoles>(userRoleParam);
             userRole.IDUser = userExist.ID;
 
