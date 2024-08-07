@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using traningday2.DTO;
 using traningday2.Models;
+using traningday2.Services;
 
 namespace traningday2.Controllers
 {
@@ -11,11 +12,13 @@ namespace traningday2.Controllers
     {
         private readonly SchoolContext _schoolContext;
         private readonly IMapper _mapper;
+        private readonly PasswordService _password;
 
         public UsersController(SchoolContext schoolContext, IMapper mapper)
         {
             _schoolContext = schoolContext;
             _mapper = mapper;
+            _password = new PasswordService();
         }
 
         //[HttpPost("addUser")]
@@ -30,6 +33,8 @@ namespace traningday2.Controllers
             });
 
             _schoolContext.Users.Add(user);
+
+            user.Password = _password.HashPassword(user.Password);
 
             _schoolContext.SaveChanges();
             return Ok(_mapper.Map<UsersDTO>(user));
