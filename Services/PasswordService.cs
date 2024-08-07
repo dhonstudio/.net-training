@@ -7,14 +7,14 @@ namespace traningday2.Services
     {
         private readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
 
-        public string HashPassword(string password)
+        public string HashPassword(string password, Users user)
         {
-            return _passwordHasher.HashPassword(null, password);
+            return _passwordHasher.HashPassword(user, password);
         }
 
-        public bool VerifyPassword(string hashedPassword, string password)
+        public bool VerifyPassword(string hashedPassword, string password, Users user)
         {
-            var result = _passwordHasher.VerifyHashedPassword(null, hashedPassword, password);
+            var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, password);
             return result == PasswordVerificationResult.Success;
         }
     }

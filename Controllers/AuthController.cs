@@ -23,7 +23,7 @@ namespace traningday2.Controllers
         {
             // Validasi user di sini
             var user = _schoolContext.Users.FirstOrDefault(u => u.Username == model.Username);
-            if (user != null && _password.VerifyPassword(user.Password, model.Password))
+            if (user != null && _password.VerifyPassword(user.Password, model.Password, user))
             {
                 var token = _tokenService.GenerateToken(model.Username);
                 return Ok(new { Token = token });

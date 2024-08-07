@@ -34,7 +34,7 @@ namespace traningday2.Controllers
 
             _schoolContext.Users.Add(user);
 
-            user.Password = _password.HashPassword(user.Password);
+            user.Password = _password.HashPassword(user.Password, user);
 
             _schoolContext.SaveChanges();
             return Ok(_mapper.Map<UsersDTO>(user));
