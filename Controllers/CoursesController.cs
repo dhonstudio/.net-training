@@ -16,6 +16,13 @@ namespace traningday2.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            var claim = User.Claims;
+            var roleid = claim.FirstOrDefault(x => x.Type == "roleid")?.Value;
+            if (roleid != "2") return BadRequest(new
+            {
+                Message = "Tidak diizinkan"
+            });
+
             return Ok(_schoolContext.Courses.AsNoTracking());
         }
 
