@@ -10,6 +10,7 @@ namespace traningday2.Services
 {
     public interface ITokenService
     {
+        string GeneratePublicToken();
         string GenerateToken(string userId, UserRolesDTO userRole);
     }
 
@@ -20,6 +21,32 @@ namespace traningday2.Services
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        public string GeneratePublicToken()
+        {
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("roleid", "2"),
+            };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public string GenerateToken(string username, UserRolesDTO userRole)

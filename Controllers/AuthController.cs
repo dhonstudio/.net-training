@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using traningday2.DTO;
 using traningday2.Models;
 using traningday2.Services;
 
@@ -28,6 +29,17 @@ namespace traningday2.Controllers
             if (userRole != null)
             {
                 var token = _tokenService.GenerateToken(model.Username, userRole);
+                return Ok(new { Token = token });
+            }
+            return Unauthorized();
+        }
+
+        [HttpPost("publicLogin")]
+        public IActionResult PublicLogin([FromHeader] string ClientId, [FromHeader] string ClientSecret)
+        {
+            if (_authService.ValidatePublic(Request))
+            {
+                var token = _tokenService.GeneratePublicToken();
                 return Ok(new { Token = token });
             }
             return Unauthorized();
