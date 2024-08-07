@@ -40,7 +40,7 @@ namespace traningday2.Controllers
             return Ok(_mapper.Map<UsersDTO>(user));
         }
 
-        [HttpPost]
+        [HttpPost("AddRole")]
         public IActionResult PostUserRoles(UserRoleParamDTO userRoleParam)
         {
             var userExist = _schoolContext.Users.FirstOrDefault(x => x.Username == userRoleParam.Username);
