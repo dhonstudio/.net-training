@@ -111,46 +111,6 @@ namespace traningday2.Migrations
                     b.ToTable("Students", "ripas");
                 });
 
-            modelBuilder.Entity("traningday2.Models.Users", b =>
-            {
-                b.Property<int>("ID")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
-
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                b.Property<DateTime>("CreatedAt")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("datetime2")
-                    .HasDefaultValueSql("getdate()");
-
-                b.Property<DateTime?>("DeletedAt")
-                    .HasColumnType("datetime2");
-
-                b.Property<string>("FirstMidName")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("LastName")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Username")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Password")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<DateTime?>("UpdatedAt")
-                    .HasColumnType("datetime2");
-
-                b.HasKey("ID");
-
-                b.ToTable("Users", "ripas");
-            });
-
             modelBuilder.Entity("traningday2.Models.Enrollment", b =>
                 {
                     b.HasOne("traningday2.Models.Course", "Course")

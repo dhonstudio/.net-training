@@ -12,7 +12,6 @@ namespace traningday2.Models
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Enrollment> Enrollments{ get; set; }
         public virtual DbSet<Course> Courses { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
