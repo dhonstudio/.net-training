@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using traningday2.Models;
 
@@ -11,9 +12,11 @@ using traningday2.Models;
 namespace traningday2.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240807012150_CreateTableUsers")]
+    partial class CreateTableUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,46 +113,6 @@ namespace traningday2.Migrations
 
                     b.ToTable("Students", "ripas");
                 });
-
-            modelBuilder.Entity("traningday2.Models.Users", b =>
-            {
-                b.Property<int>("ID")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
-
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                b.Property<DateTime>("CreatedAt")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("datetime2")
-                    .HasDefaultValueSql("getdate()");
-
-                b.Property<DateTime?>("DeletedAt")
-                    .HasColumnType("datetime2");
-
-                b.Property<string>("FirstMidName")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("LastName")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Username")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<string>("Password")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
-                b.Property<DateTime?>("UpdatedAt")
-                    .HasColumnType("datetime2");
-
-                b.HasKey("ID");
-
-                b.ToTable("Users", "ripas");
-            });
 
             modelBuilder.Entity("traningday2.Models.Enrollment", b =>
                 {
