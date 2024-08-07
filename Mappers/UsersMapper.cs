@@ -10,6 +10,8 @@ namespace traningday2.Mappers
         {
             CreateMap<UsersParamDTO, Users>();
             CreateMap<Users, UsersDTO>();
+            CreateMap<UserRoleParamDTO, UserRoles>();
+            CreateMap<UserRoles, UserRolesDTO>();
         }
     }
 }

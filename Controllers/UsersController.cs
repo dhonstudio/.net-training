@@ -39,5 +39,22 @@ namespace traningday2.Controllers
             _schoolContext.SaveChanges();
             return Ok(_mapper.Map<UsersDTO>(user));
         }
+
+        [HttpPost]
+        public IActionResult PostUserRoles(UserRoleParamDTO userRoleParam)
+        {
+            var userExist = _schoolContext.Users.FirstOrDefault(x => x.Username == userRoleParam.Username);
+            if (userExist == null) return BadRequest(new
+            {
+                Message = "user tidak ditemukan"
+            });
+            var userRole = _mapper.Map<UserRoles>(userRoleParam);
+            userRole.IDUser = userExist.ID;
+
+            _schoolContext.UserRoles.Add(userRole);
+
+            _schoolContext.SaveChanges();
+            return Ok(_mapper.Map<UserRolesDTO>(userRole));
+        }
     }
 }
