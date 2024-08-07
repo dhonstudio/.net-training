@@ -22,7 +22,7 @@ namespace traningday2.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string userId, UserRolesDTO userRole)
+        public string GenerateToken(string username, UserRolesDTO userRole)
         {
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
             var issuer = _configuration["Jwt:Issuer"];
@@ -30,8 +30,9 @@ namespace traningday2.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("username", username),
                 new Claim("roleid", userRole.IDRole.ToString()),
                 new Claim("rolename", userRole.RoleName),
             };

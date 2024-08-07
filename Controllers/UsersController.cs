@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using traningday2.DTO;
 using traningday2.Models;
@@ -13,12 +14,16 @@ namespace traningday2.Controllers
         private readonly SchoolContext _schoolContext;
         private readonly IMapper _mapper;
         private readonly PasswordService _password;
+        private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
 
-        public UsersController(SchoolContext schoolContext, IMapper mapper)
+        public UsersController(SchoolContext schoolContext, IMapper mapper, IAuthService authService, ITokenService tokenService)
         {
             _schoolContext = schoolContext;
             _mapper = mapper;
             _password = new PasswordService();
+            _authService = authService;
+            _tokenService = tokenService;
         }
 
         //[HttpPost("addUser")]
@@ -60,6 +65,30 @@ namespace traningday2.Controllers
 
             _schoolContext.SaveChanges();
             return Ok(_mapper.Map<UserRolesDTO>(userRole));
+        }
+
+        [Authorize]
+        [HttpPost("ChangeRole")]
+        public IActionResult ChangeRole(int roleid)
+        {
+            var claim = User.Claims;
+            var username = claim.FirstOrDefault(x => x.Type == "username")?.Value;
+            var user = _schoolContext.Users.FirstOrDefault(x => x.Username == username);
+            var userRoles = _schoolContext.UserRoles.FirstOrDefault(x => x.IDUser == user.ID && x.IDRole == roleid);
+            if (userRoles == null) return BadRequest(new
+            {
+                Message = "role tidak ditemukan"
+            });
+
+            var userRole = _authService.ValidateUser(username, "", roleid, true);
+            // Validasi user di sini
+            if (userRole != null)
+            {
+                var token = _tokenService.GenerateToken(username, userRole);
+                return Ok(new { Token = token });
+            }
+
+            return Unauthorized();
         }
     }
 }

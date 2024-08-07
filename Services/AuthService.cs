@@ -5,7 +5,7 @@ namespace traningday2.Services
 {
     public interface IAuthService
     {
-        UserRolesDTO? ValidateUser(string username, string password, int roleid = 0);
+        UserRolesDTO? ValidateUser(string username, string password, int roleid = 0, bool changeRole = false);
     }
 
     public class AuthService : IAuthService
@@ -18,10 +18,10 @@ namespace traningday2.Services
             _password = new PasswordService();
         }
 
-        public UserRolesDTO? ValidateUser(string username, string password, int roleid = 0)
+        public UserRolesDTO? ValidateUser(string username, string password, int roleid = 0, bool changeRole = false)
         {
             var user = _schoolContext.Users.FirstOrDefault(u => u.Username == username);
-            if (user != null && _password.VerifyPassword(user.Password, password, user))
+            if ((user != null && _password.VerifyPassword(user.Password, password, user)) || changeRole == true)
             {
                 var userRole = new UserRolesDTO()
                 {
