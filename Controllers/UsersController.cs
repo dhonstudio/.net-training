@@ -5,6 +5,8 @@ using traningday2.Models;
 
 namespace traningday2.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UsersController : Controller
     {
         private readonly SchoolContext _schoolContext;
@@ -16,6 +18,7 @@ namespace traningday2.Controllers
             _mapper = mapper;
         }
 
+        //[HttpPost("addUser")]
         [HttpPost]
         public IActionResult PostUsers(UsersParamDTO usersParam)
         {
