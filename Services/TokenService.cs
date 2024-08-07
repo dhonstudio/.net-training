@@ -2,12 +2,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using traningday2.DTO;
+using traningday2.Models;
 
 namespace traningday2.Services
 {
     public interface ITokenService
     {
-        string GenerateToken(string userId);
+        string GenerateToken(string userId, UserRolesDTO userRole);
     }
 
     public class TokenService : ITokenService
@@ -19,7 +22,7 @@ namespace traningday2.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string userId)
+        public string GenerateToken(string userId, UserRolesDTO userRole)
         {
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
             var issuer = _configuration["Jwt:Issuer"];
@@ -29,6 +32,8 @@ namespace traningday2.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("roleid", userRole.IDRole.ToString()),
+                new Claim("rolename", userRole.RoleName),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

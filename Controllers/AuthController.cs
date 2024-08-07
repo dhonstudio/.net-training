@@ -23,10 +23,11 @@ namespace traningday2.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel model)
         {
+            var userRole = _authService.ValidateUser(model.Username, model.Password);
             // Validasi user di sini
-            if (_authService.ValidateUser(model.Username, model.Password))
+            if (userRole != null)
             {
-                var token = _tokenService.GenerateToken(model.Username);
+                var token = _tokenService.GenerateToken(model.Username, userRole);
                 return Ok(new { Token = token });
             }
             return Unauthorized();

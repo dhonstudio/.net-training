@@ -1,10 +1,11 @@
-﻿using traningday2.Models;
+﻿using traningday2.DTO;
+using traningday2.Models;
 
 namespace traningday2.Services
 {
     public interface IAuthService
     {
-        bool ValidateUser(string username, string password);
+        UserRolesDTO? ValidateUser(string username, string password, int roleid = 0);
     }
 
     public class AuthService : IAuthService
@@ -17,14 +18,19 @@ namespace traningday2.Services
             _password = new PasswordService();
         }
 
-        public bool ValidateUser(string username, string password)
+        public UserRolesDTO? ValidateUser(string username, string password, int roleid = 0)
         {
             var user = _schoolContext.Users.FirstOrDefault(u => u.Username == username);
-            if (user != null)
+            if (user != null && _password.VerifyPassword(user.Password, password, user))
             {
-                return _password.VerifyPassword(user.Password, password, user);
+                var userRole = new UserRolesDTO()
+                {
+                    IDRole = roleid,
+                    Username = username
+                };
+                return userRole;
             }
-            return false;
+            return null;
         }
     }
 }
